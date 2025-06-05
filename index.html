@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Axis Infinitum Survival Command Center</title>
+<style>
+body {font-family: Arial, sans-serif; margin: 2rem; background: #f0f4f8; color:#333;}
+header {text-align:center; margin-bottom:2rem;}
+section {margin-bottom:2rem; padding:1rem; background:#fff; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1);}
+h2 {margin-top:0;}
+label {display:block; margin-top:0.5rem;}
+input[type="text"], input[type="password"] {width:100%; padding:0.5rem; margin-top:0.25rem;}
+button {padding:0.5rem 1rem; margin-top:1rem;}
+</style>
+</head>
+<body>
+<header>
+<h1>Axis Infinitum Survival Command Center</h1>
+<p>Configure your credentials and payout information.</p>
+</header>
+<section id="credentials">
+<h2>API Credentials</h2>
+<label>Exchange API Key <input type="text" id="exchangeKey"></label>
+<label>Exchange Secret <input type="password" id="exchangeSecret"></label>
+<label>Bug Bounty Platform Token <input type="text" id="bountyToken"></label>
+</section>
+<section id="payout">
+<h2>Payout Information</h2>
+<label>Bank Routing Number <input type="text" id="routing"></label>
+<label>Bank Account Number <input type="text" id="account"></label>
+<label>Crypto Wallet Address <input type="text" id="wallet"></label>
+<button id="save">Save Settings</button>
+<p id="status"></p>
+</section>
+<script>
+// Basic validation of routing number (US ABA)
+function validRouting(r){
+ if(!/^\d{9}$/.test(r)) return false;
+ var weights=[3,7,1,3,7,1,3,7,1];
+ var sum=0;
+ for(var i=0;i<9;i++) sum+=parseInt(r[i],10)*weights[i];
+ return sum%10===0;
+}
+document.getElementById('save').onclick=function(){
+ const routing=document.getElementById('routing').value.trim();
+ const account=document.getElementById('account').value.trim();
+ const wallet=document.getElementById('wallet').value.trim();
+ let msg='Settings saved.';
+ if(routing && !validRouting(routing)) msg='Invalid routing number format.';
+ document.getElementById('status').textContent=msg;
+};
+</script>
+</body>
+</html>
